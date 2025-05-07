@@ -52,13 +52,15 @@ List<Provincia> Provincias = new List<Provincia>();
 Provincia NuevaProvincia;
 do
 {
-    NuevaProvincia = CargaProvincia();
+    Console.Clear();
+    NuevaProvincia = CargaProvincia(); 
     if (NuevaProvincia != null) 
     {
         Provincias.Add(NuevaProvincia);
     }
 } while (NuevaProvincia != null);
 MostrarDatos();
+Resumen();
 void MostrarDatos()
 {
     foreach (Provincia Provincia in Provincias)
@@ -76,3 +78,46 @@ void MostrarDatos()
         }
     }
 }
+void Resumen() 
+{
+    int CiudadPoblacion = 0, CiudadSuperficie = 0, ProvinciaPoblacion = 0, ProvinciaSuperficie = 0;
+    int cp1 = 0, cp2 = 0;
+    int cp = 0, cs = 0, pp = 0, ps = 0;
+    foreach (Provincia Provincia in Provincias)
+    {
+        int x = 0, z = 0;
+        foreach (Ciudad Ciudad in Provincia.Ciudades)
+        {
+            x += Ciudad.Habitantes; pp += x;
+            z += Ciudad.Superficie; ps += z;
+            if (Ciudad.Habitantes > cp)
+            {
+                cp = Ciudad.Habitantes;
+                cp1 = Provincias.IndexOf(Provincia);
+                CiudadPoblacion = Provincia.Ciudades.IndexOf(Ciudad);
+            }
+            if (Ciudad.Superficie > cs)
+            {
+                cs = Ciudad.Superficie;
+                cp2 = Provincias.IndexOf(Provincia);
+                CiudadSuperficie = Provincia.Ciudades.IndexOf(Ciudad);
+            }
+        }
+        if (ps < z)
+        {
+            ps = z;
+            ProvinciaSuperficie = Provincias.IndexOf(Provincia);
+        }
+        if (pp < x) 
+        {
+            pp = x;
+            ProvinciaPoblacion = Provincias.IndexOf(Provincia);
+        }
+    }
+    Console.WriteLine("--- Resumen Estadistico ---");
+    Console.WriteLine($"Ciudad mas poblada: {Provincias[cp1].Ciudades[CiudadPoblacion]} ({Provincias[cp1].Ciudades[CiudadPoblacion].Habitantes} habitantes)");
+    Console.WriteLine($"Ciudad con mayor superficie: {Provincias[cp2].Ciudades[CiudadSuperficie]} ({Provincias[cp1].Ciudades[CiudadSuperficie].Superficie} km²)");
+    Console.WriteLine($"Provincia más poblada: {Provincias[ProvinciaPoblacion]} ({Provincias[ProvinciaPoblacion]} {pp} habitantes");
+    Console.WriteLine($"Provincia con mayor superficie: {Provincias[ProvinciaSuperficie]} ({ps} km²)");
+}
+
